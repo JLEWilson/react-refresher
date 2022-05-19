@@ -1,11 +1,13 @@
 import './App.css'
-import React, { useState } from 'react'
+import React from 'react'
 import Title from './components/Title'
 import Modal from './components/Modal'
+import EventList from './components/EventList'
 
 function App() {
-  const [showEvents, setShowEvents] = useState(true)
-  const [events, setEvents] = useState([
+  const [showModal, setShowModal] = React.useState(false)
+  const [showEvents, setShowEvents] = React.useState(true)
+  const [events, setEvents] = React.useState([
     {title: "mario's birthday bash", id: 1},
     {title: "bowser's live stream", id: 2},
     {title: "race on moo moo farm", id: 3}
@@ -15,6 +17,9 @@ function App() {
     setEvents(prevEvents => {
       return prevEvents.filter(event => id !== event.id)
     })
+  }
+  const handleClose = () => {
+    setShowModal(false)
   }
 
   const subtitle = "All the latest events in Marioland"
@@ -33,18 +38,13 @@ function App() {
           <button onClick={() => setShowEvents(true)}>Show Events</button>
         </div>
       )}
-      {showEvents && events.map((event, index) => (
-        <React.Fragment key={event.id}>
-          <h2>{index} - {event.title}</h2>
-          <button onClick={() => handleClick(event.id)}>delete event</button>
-        </React.Fragment>
-      ))}
-      
-      <Modal>
-        <h2>Terms and Conditions</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error odit nam et reprehenderit quibusdam temporibus officia dolorum quo sint nemo quis, laborum, quasi nisi fugit praesentium debitis repudiandae! Sapiente, omnis.</p>
-        <a href="#">find out more...</a>
-      </Modal>
+      {showEvents && <EventList events={events} handleClick={handleClick} />}
+      {showModal && <Modal handleClose={handleClose}>
+          <h2>Terms and Conditions</h2>
+          <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Error odit nam et reprehenderit quibusdam temporibus officia dolorum quo sint nemo quis, laborum, quasi nisi fugit praesentium debitis repudiandae! Sapiente, omnis.</p>
+        </Modal>
+      }
+      <button onClick={() => setShowModal(true)}>Show Modal</button>
     </div>
   );
 }
